@@ -39,7 +39,7 @@ api = connect(
 def tuple_to_dataset(input_tuple: Tuple, title: str, db):
     # skip empty tables
     if len(input_tuple) != 0:
-        # fix invalid dimensions error for the files sheet
+        # ugly hack to fix invalid dimensions error for the files sheet
         if title == 'files':
             for dict_item in input_tuple:
                 if 'size' not in dict_item:
