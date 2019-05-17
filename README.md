@@ -1,4 +1,4 @@
-# Routeros API Snooper
+# RouterOS API Snooper
 This repository contains a snooper script to extract all data from a RouterOS router as a tabbed .xlsx file. Requires API-SSL access with a certificate
 
 # Setup
