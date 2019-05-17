@@ -8,7 +8,7 @@ from librouteros.login import login_plain, login_token
 import tablib
 
 # config
-routeros_63_or_higher = False
+routeros_6_43_or_higher = False
 username = 'api'
 password = 'Auo7xmBJ8DgoWFH7'
 host = "191.232.243.34"
@@ -20,12 +20,13 @@ ctx.check_hostname = False
 ctx.verify_mode = ssl.CERT_NONE
 
 # for new (plain text password)
-if routeros_63_or_higher:
+if routeros_6_43_or_higher:
     method = (login_plain, )
 else:
     # for old (with token)
     method = (login_token, )
 
+# connect with the api
 api = connect(
     username=username,
     password=password,
