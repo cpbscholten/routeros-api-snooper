@@ -37,6 +37,12 @@ api = connect(
 
 
 def tuple_to_dataset(input_tuple: Tuple, title: str, db):
+    """
+    Transforms a list of json of a table to a sheet of an excel file
+    :param input_tuple: json input list
+    :param title: title of the sheet
+    :param db: the databook excel file
+    """
     # skip empty tables
     if len(input_tuple) != 0:
         # ugly hack to fix invalid dimensions error for the files sheet
@@ -46,17 +52,22 @@ def tuple_to_dataset(input_tuple: Tuple, title: str, db):
                     dict_item['size'] = ' '
                 if 'contents' not in dict_item:
                     dict_item['contents'] = ' '
+        # ugly hack to fix invalid dimensions for the users sheet
         if title == 'users':
             for dict_item in input_tuple:
                 if 'comment' not in dict_item:
                     dict_item['comment'] = ' '
+        # read input string as json
         json_string = json.dumps(list(input_tuple))
+        # transform json into excel dataset
         dataset = tablib.Dataset(title=title)
         dataset.json = json_string
+        # add excel dataset as a sheet in the xlsx
         db.add_sheet(dataset)
 
 
 try:
+    # retrieve data from the api
     logs = api(cmd='/log/print')
     dns_cache = api(cmd='/ip/dns/cache/print')
     dns_static = api(cmd='/ip/dns/static/print')
@@ -69,8 +80,10 @@ try:
     ip_route = api(cmd='/ip/route/print')
     bgp_ads = api(cmd="/routing/bgp/advertisements/print")
 
+    # create an excel databook document
     db = tablib.Databook()
 
+    # transform each entry as a sheet in the databook
     tuple_to_dataset(logs, 'logs', db)
     tuple_to_dataset(dns_cache, 'dns_cache', db)
     tuple_to_dataset(dhcp_client, 'dhcp_client', db)
@@ -82,8 +95,10 @@ try:
     tuple_to_dataset(ip_route, 'ip_route', db)
     tuple_to_dataset(bgp_ads, 'bgp_advertisements', db)
 
+    # retrieve the current date for the filename
     date = str(datetime.datetime.now())
+    # store as logs-**datetime**.xlsx in the logs folder
     open('logs/logs-' + date + '.xlsx', 'wb').write(db.xlsx)
 except Exception as e:
-    print('Exception occured.')
+    # print the stacktrace
     print(e)
