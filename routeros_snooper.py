@@ -8,10 +8,11 @@ from librouteros.login import login_plain, login_token
 import tablib
 
 # config
+# change these values before running the script
 routeros_6_43_or_higher = False
-username = 'api'
-password = 'Auo7xmBJ8DgoWFH7'
-host = "191.232.243.34"
+username = 'admin'
+password = ''
+host = '192.168.0.1' 
 port = 8729
 
 # ssl context
